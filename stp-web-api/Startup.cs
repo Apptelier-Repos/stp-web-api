@@ -15,6 +15,7 @@ namespace stp_web_api
 {
     public class Startup
     {
+        private readonly string MyAllowSpecificOrigin = "_myAllowSpecificOrigin";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -26,6 +27,14 @@ namespace stp_web_api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigin,
+                    builder =>
+                    {
+                        builder.WithOrigins("*").AllowAnyHeader().AllowAnyMethod();
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,6 +50,7 @@ namespace stp_web_api
                 app.UseHsts();
             }
 
+            app.UseCors(MyAllowSpecificOrigin);
             app.UseHttpsRedirection();
             app.UseMvc();
         }
