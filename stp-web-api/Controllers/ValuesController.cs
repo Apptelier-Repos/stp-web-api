@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Dapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using stp_web_api.Pocos;
 
 namespace stp_web_api.Controllers
 {
@@ -10,12 +15,21 @@ namespace stp_web_api.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        // GET api/values
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        IConfiguration configuration;
+        IDbConnection connection;
+
+        #region Ctor
+
+        public ValuesController(IConfiguration conf, IDbConnection conn)
         {
-            return new string[] { "value1", "value2" };
+            configuration = conf;
+            connection = conn;
         }
+
+        #endregion
+
+        #region Get
+
 
         // GET api/values/5
         [HttpGet("{id}")]
@@ -23,6 +37,26 @@ namespace stp_web_api.Controllers
         {
             return "value";
         }
+
+        // GET api/values
+        [HttpGet]
+        public ActionResult<IEnumerable<UserAccount>> Get()
+        {
+            var query = new StringBuilder();
+
+            query.AppendLine("SELECT [Id]");
+            query.AppendLine("      ,[CreationDate]");
+            query.AppendLine("      ,[Username]");
+            query.AppendLine("      ,[Password]");
+            query.AppendLine("  FROM [dbo].[UsersAcount]");
+
+            var userAccounts = connection.Query<UserAccount>(query.ToString());
+            return userAccounts.ToArray();
+        }
+
+        #endregion
+
+
 
         // POST api/values
         [HttpPost]
