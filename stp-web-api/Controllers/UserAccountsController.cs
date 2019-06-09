@@ -6,5 +6,9 @@ namespace stp_web_api.Controllers
     [ApiController]
     public class UserAccountsController : ControllerBase
     {
+
+        public UserAccountsController()
+        {
+        }
     }
 }
