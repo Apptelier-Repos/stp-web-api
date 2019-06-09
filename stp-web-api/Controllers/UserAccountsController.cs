@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Data;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace stp_web_api.Controllers
 {
@@ -6,9 +8,13 @@ namespace stp_web_api.Controllers
     [ApiController]
     public class UserAccountsController : ControllerBase
     {
+        private IConfiguration Configuration;
+        private IDbConnection Connection;
 
-        public UserAccountsController()
+        public UserAccountsController(IConfiguration configuration, IDbConnection connection)
         {
+            Configuration = configuration;
+            Connection = connection;
         }
     }
 }
