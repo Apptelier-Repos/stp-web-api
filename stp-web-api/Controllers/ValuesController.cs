@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using stp_web_api.Pocos;
+using stp_web_api.POCOs;
 
 namespace stp_web_api.Controllers
 {
