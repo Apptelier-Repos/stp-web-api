@@ -1,4 +1,4 @@
-﻿namespace stp_web_api.POCOs
+﻿namespace stp.data.DTOs
 {
     public class UserAccount
     {
