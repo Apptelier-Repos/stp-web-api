@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 namespace stp_web_api.Controllers
 {
@@ -8,13 +7,22 @@ namespace stp_web_api.Controllers
     [ApiController]
     public class UserAccountsController : ControllerBase
     {
-        private IConfiguration Configuration;
-        private IDbConnection Connection;
+        private readonly IDbConnection _connection;
 
-        public UserAccountsController(IConfiguration configuration, IDbConnection connection)
+        public UserAccountsController(IDbConnection connection)
         {
-            Configuration = configuration;
-            Connection = connection;
+            _connection = connection;
+        }
+
+        // POST api/useraccounts/authenticate
+        [HttpPost("authenticate")]
+        public ActionResult Authenticate([FromBody] DTOs.UserCredentials userCredentials)
+        {
+            var userAccount = new stp.data.Repository(_connection).FindUserAccountByUsernameAndPassword(userCredentials.Username, userCredentials.Password);
+            if (userAccount == null)
+                return BadRequest(new {message = "Incorrect username and/or password."});
+
+            return Ok();
         }
     }
 }
